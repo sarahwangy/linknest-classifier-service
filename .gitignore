@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+model/
+training/training-data.jsonl
+training/_checkpoints/
+*.egg-info/
+.DS_Store
