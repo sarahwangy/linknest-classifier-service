@@ -12,6 +12,7 @@ Usage:
 
 import json
 import os
+import re
 import sys
 import time
 from pathlib import Path
@@ -47,7 +48,7 @@ Respond with exactly:
     start = time.time()
     msg = anthropic_client.messages.create(
         model="claude-haiku-4-5-20251001",
-        max_tokens=32,
+        max_tokens=64,
         messages=[{"role": "user", "content": prompt}],
     )
     latency_ms = (time.time() - start) * 1000
@@ -56,8 +57,15 @@ Respond with exactly:
         msg.usage.input_tokens / 1_000_000 * HAIKU_PRICE["input"]
         + msg.usage.output_tokens / 1_000_000 * HAIKU_PRICE["output"]
     )
+    # Claude sometimes wraps the JSON in a ```json ... ``` fence despite the
+    # prompt saying not to -- same issue found (and fixed) in linknest's
+    # lib/claude.ts. Strip it before parsing instead of silently falling
+    # back to Uncategorized on every fenced response.
+    raw_text = msg.content[0].text.strip()
+    text = re.sub(r"^```(?:json)?\s*", "", raw_text)
+    text = re.sub(r"\s*```$", "", text).strip()
     try:
-        category = json.loads(msg.content[0].text.strip())["category"]
+        category = json.loads(text)["category"]
     except Exception:
         category = "Uncategorized"
     return category, latency_ms, cost
