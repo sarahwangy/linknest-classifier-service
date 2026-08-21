@@ -92,5 +92,21 @@ since no model has been trained against real data yet.
 
 ## Status (2026-08-21)
 
-Scaffolded, not yet run end-to-end. Still needed: pull real training data,
-actually fine-tune, deploy, run the comparison script, write up results.
+Run end-to-end locally (not yet deployed to Render):
+
+- Exported 971 labeled bookmarks from Linknest's Neon DB
+- Fine-tuned distilbert-base-uncased (4 epochs, CPU, ~47s) — **55.5% validation accuracy**
+- Ran `eval/compare.py` against a 146-row held-out set (same train/test split, never trained on):
+
+| | Accuracy | Avg latency | Avg cost/call | Total cost (146 calls) |
+|---|---|---|---|---|
+| Claude Haiku (current production) | 79.5% | 900ms | $0.000175 | $0.0255 |
+| Fine-tuned DistilBERT (this service) | 55.5% | 24ms | $0 (self-hosted, excl. server rental) | $0 |
+
+**Takeaway**: ~37x faster and free per-call, at a real accuracy cost — driven by
+severe class imbalance in the training data (several of the 17 categories have
+under 10 examples). Not a drop-in replacement for Linknest's production
+classification as-is; the honest story is the tradeoff, not "it's better."
+
+Still needed: deploy to Render/Fly.io, decide how the `model/` directory gets
+into the deployed image (gitignored, not yet solved).
