@@ -19,6 +19,7 @@ from pathlib import Path
 
 import anthropic
 import httpx
+from sklearn.metrics import classification_report, confusion_matrix
 
 CATEGORIES = [
     "Technology", "Science", "Business", "Finance", "Health", "Entertainment",
@@ -95,6 +96,9 @@ def main() -> None:
     claude_correct = finetuned_correct = 0
     claude_latency_total = finetuned_latency_total = 0.0
     claude_cost_total = 0.0
+    y_true: list[str] = []
+    claude_preds: list[str] = []
+    finetuned_preds: list[str] = []
 
     for i, row in enumerate(rows, 1):
         truth = row["aiCategory"]
@@ -107,6 +111,9 @@ def main() -> None:
         claude_latency_total += c_ms
         finetuned_latency_total += f_ms
         claude_cost_total += c_cost
+        y_true.append(truth)
+        claude_preds.append(c_cat)
+        finetuned_preds.append(f_cat)
 
         print(f"[{i}/{len(rows)}] truth={truth:14s} claude={c_cat:14s} finetuned={f_cat:14s}")
 
@@ -116,6 +123,20 @@ def main() -> None:
           f"avg_cost=${claude_cost_total/n:.6f}  total_cost=${claude_cost_total:.4f}")
     print(f"Fine-tuned     accuracy={finetuned_correct/n:.1%}  avg_latency={finetuned_latency_total/n:.0f}ms  "
           f"avg_cost=$0.000000 (self-hosted, excl. server rental)")
+
+    # Overall accuracy hides per-class failure: with 971 labeled bookmarks across
+    # 17 categories, several classes have <10 training examples, so a model can
+    # score well on accuracy while missing minority classes almost entirely.
+    # Per-class precision/recall/F1 (and the confusion matrix) surface that.
+    labels = sorted(set(y_true) | set(claude_preds) | set(finetuned_preds))
+    print("\n--- Claude Haiku: per-class report ---")
+    print(classification_report(y_true, claude_preds, labels=labels, zero_division=0))
+    print("--- Fine-tuned: per-class report ---")
+    print(classification_report(y_true, finetuned_preds, labels=labels, zero_division=0))
+
+    print("--- Fine-tuned: confusion matrix (rows=truth, cols=predicted) ---")
+    print("labels:", labels)
+    print(confusion_matrix(y_true, finetuned_preds, labels=labels))
 
 
 if __name__ == "__main__":
