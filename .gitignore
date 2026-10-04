@@ -4,6 +4,8 @@ __pycache__/
 venv/
 .env
 model/
+model.tar.gz
+ecs-task-def.json
 training/training-data.jsonl
 training/_checkpoints/
 *.egg-info/
