@@ -1,0 +1,9 @@
+# Only include the application and this build's configuration in Docker context.
+**
+!app/
+!app/__init__.py
+!app/main.py
+!app/schemas.py
+!requirements-cloudrun.txt
+!Dockerfile.cloudrun
+!Dockerfile.cloudrun.dockerignore

@@ -1,0 +1,17 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Cloud Run uses CPU inference for this lab; avoid installing CUDA packages.
+RUN pip install --no-cache-dir torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+COPY requirements-cloudrun.txt .
+RUN pip install --no-cache-dir -r requirements-cloudrun.txt
+
+COPY app/ app/
+
+# Mount the model bucket read-only at /app/model when deploying Cloud Run.
+# The model and SERVICE_API_KEY are supplied at runtime, never baked in here.
+RUN mkdir -p /app/model
+
+EXPOSE 8000
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
