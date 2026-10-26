@@ -1,0 +1,13 @@
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+tfplan
+*.tfvars
+*.tfvars.json
+*.auto.tfvars
+*.auto.tfvars.json
+crash.log
+crash.*.log
+.terraform.tfstate.lock.info
+# Keep .terraform.lock.hcl in version control once init creates it.
