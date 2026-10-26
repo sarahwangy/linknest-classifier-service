@@ -1,0 +1,7 @@
+expected_account_id = "123456789012"
+vpc_id = "vpc-REPLACE"
+subnet_id = "subnet-REPLACE"
+image_uri = "123456789012.dkr.ecr.ap-southeast-2.amazonaws.com/REPOSITORY@sha256:REPLACE_WITH_64_HEX_CHARACTERS"
+execution_role_arn = "arn:aws:iam::123456789012:role/EXISTING_EXECUTION_ROLE"
+task_role_arn = "arn:aws:iam::123456789012:role/EXISTING_EXEC_ENABLED_TASK_ROLE"
+api_key_secret_arn = "arn:aws:secretsmanager:ap-southeast-2:123456789012:secret:EXISTING_SECRET"
