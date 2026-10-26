@@ -1,5 +1,7 @@
 # Linknest GCP Terraform 实验
 
+中文 | [English](README.en.md)
+
 本目录保存 Google Cloud 的 Terraform 配置，独立于 `../aws/sandbox`，两边分别初始化、使用各自的 Provider 和 state。
 
 ## 当前状态

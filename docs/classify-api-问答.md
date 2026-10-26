@@ -1,5 +1,7 @@
 # classify API 相关问答
 
+中文 | [English](classify-api-qa.en.md)
+
 > 09.30整理。同一份内容也存在 Jetstar 面试准备文件（`学习-相关/求职-cover-letter/saved-工作JD/Jetstar-AI-Solutions-Delivery-Specialist/09.25-面试准备-Murtaza-Eloy.md`）里，这里是给这个项目本身留一份独立记录。
 
 ## classify API 在哪里——两个地方，容易搞混
