@@ -26,7 +26,7 @@ app/
   main.py             # FastAPI service — loads the model once at startup, serves /classify
   schemas.py          # request/response pydantic models
 eval/
-  compare.py          # 方案A (Claude Haiku) vs 方案B (this service) on held-out bookmarks
+  compare.py          # option A (Claude Haiku) vs option B (this service) on held-out bookmarks
 ```
 
 ## Setup
@@ -110,3 +110,10 @@ classification as-is; the honest story is the tradeoff, not "it's better."
 
 Still needed: deploy to Render/Fly.io, decide how the `model/` directory gets
 into the deployed image (gitignored, not yet solved).
+
+## Documentation
+
+- Classification API Q&A: [English](docs/classify-api-qa.en.md) · [中文](docs/classify-api-问答.md). Historical benchmark notes, with explicit caveats about unresolved data counts.
+- GCP Terraform lab: [English](infra/gcp/README.en.md) · [中文](infra/gcp/README.md). Includes the completed create/verify/cleanup cycle from October 2026.
+- [AWS Terraform sandbox](infra/aws/sandbox/README.md).
+- [Public CA certificate bundle: purpose and verification](docs/ca-certificate-bundle.md).
